@@ -5,10 +5,11 @@ const express = require("express"),
   jsonParser = bodyParser.json(),
   { Client } = require("pg"),
   client = new Client({
-    host: "localhost",
-    port: 5334,
+    host: "pwa-postgres",
+    port: 5432,
     user: "database-user",
-    password: "pwaproject"
+    password: "pwaproject",
+    database: "pwa"
   }),
   dbManager = require("./db-query");
 
@@ -34,5 +35,5 @@ app.post("/token", jsonParser, (req, res) => {
 });
 
 app.listen(PORT, function() {
-  console.log("Listening on port 3000!");
+  console.log("Listening on port " + PORT + "!");
 });

@@ -7,21 +7,16 @@ services:
   
   pwa-front:
     build:
-      context: pwa-project/
+      context: website/
       target: front-install
     command: sh -c "npm run start"
     environment:
       - SERVER_NAME=localhost
     volumes:
-      - ./pwa-project/src:/app/src:ro
+      - ./website/src:/app/src:ro
 
-  pwa-api:
-    build:
-      context: pwa-api/
-      target: api-install
-    environment:
-      - PORT=8000
-    command: sh -c "npm run start"
+  # No specific build for the API
+  # Maybe install `nodemon` for hotreload the api
 
   pwa-certbot:
     image: alpine # Small image since we don't want certbot in dev

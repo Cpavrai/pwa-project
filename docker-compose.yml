@@ -3,14 +3,14 @@ version: "3.4"
 services:
   pwa-nginx:
     container_name: pwa-nginx
-    build: pwa-nginx/
+    build: nginx/
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt:ro
       - ./data/certbot/www:/var/www/certbot:ro
     environment:
-      - SERVER_NAME="MERCI DE REMPLACER LE SERVER_NAME, MERCI !!"
-      - CERT_FULLCHAIN="/etc/letsencrypt/live/${SERVER_NAME}/fullchain.pem"
-      - CERT_PRIVKEY="/etc/letsencrypt/live/${SERVER_NAME}/privkey.pem"
+      - SERVER_NAME="pwaproject.fr"
+      - CERT_FULLCHAIN="/etc/letsencrypt/live/pwaproject.fr/fullchain.pem"
+      - CERT_PRIVKEY="/etc/letsencrypt/live/pwaproject.fr/privkey.pem"
     # Command is used to substitute env variables from the nginx conf
     command: sh -c "envsubst \"`env | awk -F = '{printf \" $$%s\", $$1}'`\" < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     ports:
@@ -28,7 +28,7 @@ services:
 
   pwa-front:
     container_name: pwa-front
-    build: pwa-project/
+    build: website/
     environment:
       - PORT=8000
     networks:
@@ -36,19 +36,22 @@ services:
 
   pwa-api:
     container_name: pwa-api
-    build: pwa-api/
+    build: api/
+    environment:
+      - PORT=8000
     networks:
       - pwa-api
       - pwa-postgres
 
   pwa-postgres:
     image: postgres:latest
+    container_name: pwa-postgres
     volumes:
       - ./data/postgres:/opt/postgres/data
     environment:
-      - POSTGRES_USER="manager"
-      - POSTGRES_PASSWORD="admin"
-      - POSTGRES_DB="pwa"
+      - POSTGRES_USER=database-user
+      - POSTGRES_PASSWORD=pwaproject
+      - POSTGRES_DB=pwa
     networks:
       - pwa-postgres
 
