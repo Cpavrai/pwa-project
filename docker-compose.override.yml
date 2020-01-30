@@ -1,0 +1,29 @@
+version: "3.4"
+
+services:
+  pwa-nginx:
+    environment:
+      - SERVER_NAME=localhost
+  
+  pwa-front:
+    build:
+      context: pwa-project/
+      target: front-install
+    command: sh -c "npm run start"
+    environment:
+      - SERVER_NAME=localhost
+    volumes:
+      - ./pwa-project/src:/app/src:ro
+
+  pwa-api:
+    build:
+      context: pwa-api/
+      target: api-install
+    environment:
+      - PORT=8000
+    command: sh -c "npm run start"
+
+  pwa-certbot:
+    image: alpine # Small image since we don't want certbot in dev
+    entrypoint: sh -c ""
+
