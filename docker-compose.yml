@@ -47,7 +47,7 @@ services:
     image: postgres:latest
     container_name: pwa-postgres
     volumes:
-      - ./data/postgres:/opt/postgres/data
+        - pwa-postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=database-user
       - POSTGRES_PASSWORD=pwaproject
@@ -70,3 +70,6 @@ networks:
   pwa-api:
   pwa-postgres:
   pwa-certbot:
+
+volumes:
+  pwa-postgres:
